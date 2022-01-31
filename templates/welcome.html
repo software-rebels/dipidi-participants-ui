@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}django-bootstrap-v5{% endblock %}
+
+{% block content %}
+    <h1>Get started with the experiment</h1>
+    <div class="col-lg-8 px-0">
+        <p class="lead">Thank you for your time. You can start the experiment by clicking on the button blow. Before
+            that,
+            we recommend going through a quick overview of the tasks in this page.</p>
+    </div>
+
+    <a href="{% url 'begin_page' %}" class="btn btn-primary mr-3">Start Experiment</a>
+    <a class="btn btn-secondary mr-3">Exit</a>
+
+    <hr class="my-5 w-25 mx-0">
+    <div class="row">
+    <h3>Useful Information</h3>
+        <div class="col-md-12 mt-4">
+            <ol>
+                <li><b>What is a target (or deliverable)?</b> A target is the final build artifact that is either a library or a executable. In CMake, the targets are defined by add_executable or add_library commands.</li>
+                <li><b>How can I find the targets for a project?</b></li>
+                <li><b>Can I use my own IDE or other tools?</b> Yes!</li>
+                <li><b>Do I have access to the project source code?</b> We will give you the repository URL of the project in each step.</li>
+            </ol>
+        </div>
+    </div>
+    <hr class="my-5 w-25 mx-0">
+    <h3>Your Tasks in a Glance</h3>
+    <div class="row mt-4">
+        {% for task in tasks %}
+            <div class="col-md-4">
+                <b>{{ task.0 }}</b>
+                <p>{{ task.1 }}</p>
+
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr class="my-5">
+
+    <p class="text-muted">The experiment has been designed at REBEL's Research Lab at University of Waterloo. Ethics
+        clearance: ####</p>
+{% endblock %}

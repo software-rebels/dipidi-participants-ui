@@ -24,5 +24,6 @@ urlpatterns = [
     path('begin_experiment', views.BeginExperimentView.as_view(), name='begin_page'),
     path('tasks/<int:order>/', views.TasksView.as_view(), name='tasks'),
     path('tasks/<int:order>/ready', views.MarkAsReadyView.as_view(), name='mark_as_ready'),
-    path('post_experiment', views.BeginExperimentView.as_view(), name='post_experiment')
+    path('tasks/<int:order>/skip', views.SkipTaskView.as_view(), name='skip'),
+    path('post_experiment', views.PostExperimentView.as_view(), name='post_experiment')
 ]

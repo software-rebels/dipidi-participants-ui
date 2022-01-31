@@ -6,7 +6,7 @@ import uuid
 
 
 def getRandomToolingLevel():
-    return random.choices([1,2,3])
+    return random.choice([1,2,3])
 
 
 # Create your models here.
@@ -33,8 +33,8 @@ class Participant(models.Model):
                                           defaults=dict(
                                               username=email,
                                               password=uuid.uuid4()
-                                          ))
-        return Participant.objects.create(user=user)
+                                          ))[0]
+        return Participant.objects.get_or_create(user=user)[0]
 
 
 class TimeLog(models.Model):
@@ -58,6 +58,7 @@ class Task(models.Model):
         ('A', 'Type A'),
         ('B', 'Type B'),
         ('C', 'Type C'),
+        ('Q', 'Questionnaire')
     ]
     task_type = models.CharField(max_length=1, choices=TASK_TYPE_CHOICES)
     project = models.CharField(max_length=100, null=True, blank=True)
@@ -74,6 +75,7 @@ class ParticipantTask(models.Model):
     order = models.IntegerField()
     is_ready = models.BooleanField(default=False)
     is_done = models.BooleanField(default=False)
+    is_skipped = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.participant.user.username}-{self.order}-{self.task.task_type}"
@@ -84,15 +86,21 @@ class ParticipantTask(models.Model):
         A = Task.objects.filter(task_type='A')
         B = Task.objects.filter(task_type='B')
         C = Task.objects.filter(task_type='C')
-        tasks = random.choices(A) + random.choices(B, k=2) + random.choices(C, k=2)
+        tasks = random.choices(A) + random.choices(B, k=1) + random.choices(C, k=1)
         random.shuffle(tasks)
         for idx, task in enumerate(tasks):
             ParticipantTask.objects.create(
                 task=task,
                 participant=participant,
-                order=idx,
+                order=idx+1,
                 is_done=False
             )
+        ParticipantTask.objects.create(
+            task=Task.objects.get(task_type='Q'),
+            participant=participant,
+            order=4,
+            is_done=False
+        )
 
 
 class Response(models.Model):

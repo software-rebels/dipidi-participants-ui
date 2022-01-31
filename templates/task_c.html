@@ -13,13 +13,34 @@
 
     <h3>Project Name: {{ project }}</h3>
     <p>Download project at: {{ repo_link }}</p>
-    <p>Build Configurations: {{ configuration }}</p>
-    <p>Order the commits based on: {{ criteria }}</p>
-    <p></p>
-    <form role="form" class="row" method="post">
-        {% csrf_token %}
-        {% bootstrap_formset forms layout='inline' %}
-        {% buttons submit='OK' reset='Cancel' layout='inline' %}{% endbuttons %}
-    </form>
+    {% if not ready %}
+        <form role="form" class="row" method="post" action="ready">
+            {% csrf_token %}
+            {% buttons submit='Ready' layout='inline' %}{% endbuttons %}
+        </form>
+    {% endif %}
+    {% if ready %}
+        {% if type == 1 %}
+            <p>Affect these deliverables: {{ deliverables }}</p>
+        {% endif %}
+        {% if type == 2 %}
+            <p>Affect this variant: {{ variant }}</p>
+        {% endif %}
+        {% if type == 3 %}
+            <p>Under which configurations the changes will propagate to the final product?</p>
+        {% endif %}
+        <p>Order the commits based on: {{ criteria }}</p>
+        <p></p>
+        <form role="form" class="row" method="post">
+            {% csrf_token %}
+            {% bootstrap_formset forms layout='inline' %}
+            <div class="row">
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="skip" class="btn btn-warning">Skip</a>
+                </div>
+            </div>
+        </form>
+    {% endif %}
 
 {% endblock %}
