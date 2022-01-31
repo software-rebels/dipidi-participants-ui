@@ -22,5 +22,7 @@ urlpatterns = [
     path('login/<uuid:uuid_link>', views.LoginByLinkView.as_view()),
     path('welcome', views.StartPageView.as_view(), name='welcome'),
     path('begin_experiment', views.BeginExperimentView.as_view(), name='begin_page'),
-    path('tasks/<int:order>', views.TasksView.as_view(), name='tasks')
+    path('tasks/<int:order>/', views.TasksView.as_view(), name='tasks'),
+    path('tasks/<int:order>/ready', views.MarkAsReadyView.as_view(), name='mark_as_ready'),
+    path('post_experiment', views.BeginExperimentView.as_view(), name='post_experiment')
 ]

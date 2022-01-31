@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
-{% block title %}Task A{% endblock %}
+{% block title %}Task B{% endblock %}
 
 {% block content %}
     {% if tooling_level == '3' %}
@@ -20,8 +20,8 @@
         </form>
     {% endif %}
     {% if ready %}
-        <p>Change Commit ID: {{ commit }}</p>
-        <p>Build Configuration: {{ configuration }}</p>
+        <p>Build Configurations: {{ configuration }}</p>
+        <p>Order the commits based on: {{ criteria }}</p>
         <p></p>
         <form role="form" class="row" method="post">
             {% csrf_token %}

@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import reverse
 from django.views import View
 from .models import Participant, TimeLog, ParticipantTask, Response
-from .forms import TypeAForm
+from .forms import TypeAForm, TypeBForm
 from django.forms import formset_factory
 
 
@@ -51,26 +51,77 @@ class BeginExperimentView(LoginRequiredMixin, View):
     def get(self, request):
         participant = self.request.user.participant
         TimeLog.createAction("BeginExperiment", participant)
-        return HttpResponseRedirect('tasks/1')
+        url = reverse('tasks', kwargs={'order': 1})
+        return HttpResponseRedirect(url)
+
+
+class MarkAsReadyView(LoginRequiredMixin, View):
+    def post(self, request, order):
+        participant = self.request.user.participant
+        task = ParticipantTask.objects.get(participant=participant, order=order)
+        task.is_ready = True
+        task.save()
+        TimeLog.createAction(f"MarkAsReady-{order}", participant)
+        url = reverse('tasks', kwargs={'order': order})
+        return HttpResponseRedirect(url)
 
 
 class TasksView(LoginRequiredMixin, View):
     def get(self, request, order):
         participant = self.request.user.participant
+        if order > 3:
+            url = reverse('post_experiment')
+            return HttpResponseRedirect(url)
+
         task = ParticipantTask.objects.get(participant=participant, order=order)
-        TimeLog.createAction(f"LoadTask-{order}", participant)
         if task.is_done:
-            return HttpResponse("You already completed this task!")
-        TaskFormSet = formset_factory(TypeAForm, extra=3)
-        return render(request, f'task_{task.task.task_type.lower()}.html', {**task.task.extra, "forms": TaskFormSet()})
+            url = reverse('tasks', kwargs={'order': order + 1})
+            return HttpResponseRedirect(url)
+        TimeLog.createAction(f"LoadTask-{order}", participant)
+        if task.task.task_type == 'A':
+            TaskFormSet = formset_factory(TypeAForm, extra=task.task.extra['number_of_targets'])
+            formset = TaskFormSet()
+        elif task.task.task_type == 'B':
+            TaskFormSet = formset_factory(TypeBForm, extra=0)
+            formset = TaskFormSet(initial=[
+                {"commit_id": commit} for commit in task.task.extra['commits']
+            ])
+        elif task.task.task_type == 'C':
+            pass
+        else:
+            url = reverse('welcome')
+            return HttpResponseRedirect(url)
+        context = {
+            **task.task.extra,
+            "forms": formset,
+            "tooling_level": participant.tooling_level,
+            "ready": task.is_ready
+        }
+        return render(request, f'task_{task.task.task_type.lower()}.html', context)
 
     def post(self, request, order):
         participant = self.request.user.participant
         task = ParticipantTask.objects.get(participant=participant, order=order)
-        TaskFormSet = formset_factory(TypeAForm, extra=3)
-        formset = TaskFormSet(request.POST)
+        if task.task.task_type == 'A':
+            TaskFormSet = formset_factory(TypeAForm)
+            formset = TaskFormSet(request.POST)
+        elif task.task.task_type == 'B':
+            TaskFormSet = formset_factory(TypeBForm)
+            formset = TaskFormSet(request.POST, initial=[
+                {"commit_id": commit} for commit in task.task.extra['commits']
+            ])
+        else:
+            return HttpResponse("Shouldn't happen! Please send us an email.")
+
         if formset.is_valid():
             for form in formset:
                 Response.objects.create(participant_task=task, response=json.dumps(form.cleaned_data))
-        TimeLog.createAction(f"FinishTask-{order}", participant)
-        return HttpResponseRedirect(f'tasks/{order+1}')
+            TimeLog.createAction(f"FinishTask-{order}", participant)
+            task.is_done = True
+            task.save()
+            url = reverse('tasks', kwargs={'order': order+1})
+            return HttpResponseRedirect(url)
+        else:
+            print(formset.non_form_errors())
+            print("error")
+            return HttpResponse("Input is not valid!")

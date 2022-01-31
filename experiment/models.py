@@ -24,6 +24,9 @@ class Participant(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.user.email or self.user.username
+
     @classmethod
     def createParticipant(cls, email):
         user = User.objects.get_or_create(email=email,
@@ -38,6 +41,9 @@ class TimeLog(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     action = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.participant.user.email}-{self.action}-{self.created_at}'
 
     @classmethod
     def createAction(cls, action: str, participant: Participant):
@@ -58,15 +64,19 @@ class Task(models.Model):
     extra = models.JSONField()  # Commits, RPC Server, etc
     participants = models.ManyToManyField(Participant, through='ParticipantTask', related_name='tasks')
 
-    def __repr__(self):
-        return f"{self.task_type}"
+    def __str__(self):
+        return f"{self.task_type}-{self.project}"
 
 
 class ParticipantTask(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     order = models.IntegerField()
+    is_ready = models.BooleanField(default=False)
     is_done = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.participant.user.username}-{self.order}-{self.task.task_type}"
 
     @classmethod
     def initializeTasks(cls, participant: Participant):
@@ -89,4 +99,7 @@ class Response(models.Model):
     participant_task = models.ForeignKey(ParticipantTask, on_delete=models.CASCADE)
     response = models.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.participant_task.participant.user.email}-{self.participant_task.task.task_type} '
 
