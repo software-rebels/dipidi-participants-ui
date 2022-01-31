@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block title %}Task A{% endblock %}
+
+{% if dipidi %}
+    <p>Access DiPiDi tool at {{ dipidi_url }}</p>
+{% endif %}
+
+{% if existing_tool %}
+    <p>Access the tool at {{ existing_tool_url }}</p>
+{% endif %}
+
+{% block content %}
+    <h3>Project Name: {{ project }}</h3>
+    <p>Download project at: {{ repo_link }}</p>
+    <p>Change Commit ID: {{ commit }}</p>
+    <p>Build Configuration: {{ configuration }}</p>
+    <form role="form" class="row" method="post">
+        {% csrf_token %}
+        {{ forms.management_form }}
+        {% for form in forms %}
+            {% bootstrap_form form layout='inline' %}
+        {% endfor %}
+        {% buttons submit='OK' reset='Cancel' layout='inline' %}{% endbuttons %}
+    </form>
+
+{% endblock %}

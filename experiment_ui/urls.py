@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from experiment import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/<uuid:uuid_link>', views.LoginByLinkView.as_view()),
+    path('welcome', views.StartPageView.as_view(), name='welcome'),
+    path('begin_experiment', views.BeginExperimentView.as_view(), name='begin_page'),
+    path('tasks/<int:order>', views.TasksView.as_view(), name='tasks')
 ]
