@@ -58,3 +58,4 @@ class Questionnaire(forms.Form):
                                    label="How much experience did you have with the projects provided to you?")
     problems = forms.CharField(label="Did you encounter any problem during the experiment?", required=False)
     feedback = forms.CharField(label="Any feedback about the experiment?", required=False)
+    interview = forms.BooleanField(label="Can we contact you for a quick interview?", required=False, initial=False)

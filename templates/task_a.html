@@ -3,6 +3,7 @@
 {% block title %}Task A{% endblock %}
 {% block subtitle %}Task {{ order }}{% endblock %}
 {% block content %}
+    <p>You are provided with the names of changed files and a set of build specifications. Your task is to list impacted deliverables. The experiment UI provides a text input field for you to list those deliverables.</p>
     {% if tooling_level == '3' %}
         <p>Access DiPiDi tool at <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></p>
     {% endif %}

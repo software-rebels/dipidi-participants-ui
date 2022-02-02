@@ -54,10 +54,10 @@ class StartPageView(LoginRequiredMixin, View):
 
             if task == 'C':
                 rendered_tasks.append([f"{idx + 1}. Identify the Commit",
-                                       "You are presented"
-                                       "with three commits and asked to identify those that (a) affect"
-                                       "a specified set of deliverables or (b) affect a specific variant of"
-                                       "the software or (c) identify the configuration settings under"
+                                       "You are presented "
+                                       "with three commits and asked to identify those that (a) affect "
+                                       "a specified set of deliverables or (b) affect a specific variant of "
+                                       "the software or (c) identify the configuration settings under "
                                        "which the changes will affect any target."
                                        ])
 

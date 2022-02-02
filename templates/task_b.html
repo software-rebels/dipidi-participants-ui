@@ -3,6 +3,11 @@
 {% block title %}Task B{% endblock %}
 {% block subtitle %}Task {{ order }}{% endblock %}
 {% block content %}
+    <p>
+        You are given three commits and a set of build specifications. We ask you to rank the commits listed in
+        the experiment UI based on (a) the number of impacted deliverables or (b) the number of impacted application
+        variants (e.g., number of affected OS).
+    </p>
     {% if tooling_level == '3' %}
         <p>Access DiPiDi tool at <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></p>
     {% endif %}
