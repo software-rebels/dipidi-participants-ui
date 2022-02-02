@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}django-bootstrap-v5{% endblock %}
-
+{% block title %}The Experiment{% endblock %}
+{% block subtitle %}Welcome{% endblock %}
 {% block content %}
     <h1>Get started with the experiment</h1>
     <div class="col-lg-8 px-0">
@@ -25,6 +25,12 @@
             </ol>
         </div>
     </div>
+    {% if tooling_level == '2' %}
+        {% include 'existingtool.html' %}
+    {% endif %}
+    {% if tooling_level == '3' %}
+        {% include 'dipiditool.html' %}
+    {% endif %}
     <hr class="my-5 w-25 mx-0">
     <h3>Your Tasks in a Glance</h3>
     <div class="row mt-4">

@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
 {% block title %}Task C{% endblock %}
-
+{% block subtitle %}Task {{ order }}{% endblock %}
 {% block content %}
     {% if tooling_level == '3' %}
-        <p>Access DiPiDi tool at {{ dipidi_url }}</p>
+        <p>Access DiPiDi tool at <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></p>
     {% endif %}
 
     {% if tooling_level == '2' %}
-        <p>Access the tool at {{ existing_tool_url }}</p>
+        <p>Access the tool at <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></p>
     {% endif %}
 
     <h3>Project Name: {{ project }}</h3>
-    <p>Download project at: {{ repo_link }}</p>
+    <p>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></p>
     {% if not ready %}
         <form role="form" class="row" method="post" action="ready">
             {% csrf_token %}
@@ -21,19 +21,17 @@
     {% endif %}
     {% if ready %}
         {% if type == 1 %}
-            <p>Affect these deliverables: {{ deliverables }}</p>
+            <b>Identify the commits which affect these deliverables: {{ deliverables }}</b>
         {% endif %}
         {% if type == 2 %}
-            <p>Affect this variant: {{ variant }}</p>
+            <b>Identify the commits which affect this variant: {{ variant }}</b>
         {% endif %}
         {% if type == 3 %}
-            <p>Under which configurations the changes will propagate to the final product?</p>
+            <b>Under which configurations the changes will propagate to the final product? Please write the configuration</b>
         {% endif %}
-        <p>Order the commits based on: {{ criteria }}</p>
-        <p></p>
         <form role="form" class="row" method="post">
             {% csrf_token %}
-            {% bootstrap_formset forms layout='inline' %}
+            {% bootstrap_formset forms %}
             <div class="row">
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">Submit</button>

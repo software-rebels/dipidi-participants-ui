@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
 {% block title %}Task A{% endblock %}
-
+{% block subtitle %}Task {{ order }}{% endblock %}
 {% block content %}
     {% if tooling_level == '3' %}
-        <p>Access DiPiDi tool at {{ dipidi_url }}</p>
+        <p>Access DiPiDi tool at <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></p>
     {% endif %}
 
     {% if tooling_level == '2' %}
-        <p>Access the tool at {{ existing_tool_url }}</p>
+        <p>Access the tool at <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></p>
     {% endif %}
 
     <h3>Project Name: {{ project }}</h3>
-    <p>Download project at: {{ repo_link }}</p>
+    <p>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></p>
     {% if not ready %}
         <form role="form" class="row" method="post" action="ready">
             {% csrf_token %}
@@ -20,12 +20,12 @@
         </form>
     {% endif %}
     {% if ready %}
-        <p>Change Commit ID: {{ commit }}</p>
-        <p>Build Configuration: {{ configuration }}</p>
-        <p></p>
+        <p><b>Given the following commit id and the build time configuration, please find the impacted targets (deliverables). There are extra inputs than the actually impacted targets.</b></p>
+        <p><b>Change Commit ID: {{ commit }}</b></p>
+        <p><b>Build Configuration: {{ configuration }}</b></p>
         <form role="form" class="row" method="post">
             {% csrf_token %}
-            {% bootstrap_formset forms layout='inline' %}
+            {% bootstrap_formset forms %}
             <div class="row">
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">Submit</button>

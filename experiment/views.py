@@ -133,7 +133,8 @@ class TasksView(LoginRequiredMixin, View):
             **task.task.extra,
             "forms": formset,
             "tooling_level": participant.tooling_level,
-            "ready": task.is_ready
+            "ready": task.is_ready,
+            "order": order
         }
         return render(request, f'task_{task.task.task_type.lower()}.html', context)
 
