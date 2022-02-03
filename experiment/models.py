@@ -65,6 +65,9 @@ class Task(models.Model):
     extra = models.JSONField()  # Commits, RPC Server, etc
     participants = models.ManyToManyField(Participant, through='ParticipantTask', related_name='tasks')
 
+    class Meta:
+        ordering = ('task_type', 'project')
+
     def __str__(self):
         return f"{self.task_type}-{self.project}"
 
