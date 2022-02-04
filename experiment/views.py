@@ -79,9 +79,10 @@ class MarkAsReadyView(LoginRequiredMixin, View):
     def post(self, request, order):
         participant = self.request.user.participant
         task = ParticipantTask.objects.get(participant=participant, order=order)
-        task.is_ready = True
-        task.save()
-        TimeLog.createAction(f"MarkAsReady-{order}", participant)
+        if not task.is_ready:
+            task.is_ready = True
+            task.save()
+            TimeLog.createAction(f"MarkAsReady-{order}", participant)
         url = reverse('tasks', kwargs={'order': order})
         return HttpResponseRedirect(url)
 
@@ -109,7 +110,8 @@ class TasksView(LoginRequiredMixin, View):
         if task.is_done:
             url = reverse('tasks', kwargs={'order': order + 1})
             return HttpResponseRedirect(url)
-        TimeLog.createAction(f"LoadTask-{order}", participant)
+        if not task.is_ready:
+            TimeLog.createAction(f"LoadTask-{order}", participant)
         if task.task.task_type == 'A':
             TaskFormSet = formset_factory(TypeAForm, extra=task.task.extra['number_of_targets'])
             formset = TaskFormSet()

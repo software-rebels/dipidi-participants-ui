@@ -62,6 +62,7 @@ class Task(models.Model):
     ]
     task_type = models.CharField(max_length=1, choices=TASK_TYPE_CHOICES)
     project = models.CharField(max_length=100, null=True, blank=True)
+    title = models.CharField(max_length=100, null=True, blank=True)
     extra = models.JSONField()  # Commits, RPC Server, etc
     participants = models.ManyToManyField(Participant, through='ParticipantTask', related_name='tasks')
 
@@ -69,7 +70,7 @@ class Task(models.Model):
         ordering = ('task_type', 'project')
 
     def __str__(self):
-        return f"{self.task_type}-{self.project}"
+        return f"{self.task_type}-{self.project}-{self.title}"
 
 
 class ParticipantTask(models.Model):
@@ -85,23 +86,30 @@ class ParticipantTask(models.Model):
 
     @classmethod
     def initializeTasks(cls, participant: Participant):
-        # Randomly select 1 Type A, 2 Type B, and 2 Type C task
-        A = Task.objects.filter(task_type='A')
-        B = Task.objects.filter(task_type='B')
-        C = Task.objects.filter(task_type='C')
-        tasks = random.choices(A) + random.choices(B, k=1) + random.choices(C, k=1)
+        # Shuffle the projects
+        projects = ["ET", "UV", "BOX2D"]
+        random.shuffle(projects)
+
+        # Randomly select 1 Type A, 2 Type B, and 2 Type C task from different projects
+        A = Task.objects.filter(task_type='A', project=projects[0])
+        B = Task.objects.filter(task_type='B', project=projects[1])
+        C = Task.objects.filter(task_type='C', project=projects[2])
+        tasks = random.choices(A) + random.choices(B, k=2) + random.choices(C, k=2)
         random.shuffle(tasks)
+        task_order = 1
         for idx, task in enumerate(tasks):
             ParticipantTask.objects.create(
                 task=task,
                 participant=participant,
-                order=idx+1,
+                order=task_order,
                 is_done=False
             )
+            task_order += 1
+        # Last task will be the questionnaire
         ParticipantTask.objects.create(
             task=Task.objects.get(task_type='Q'),
             participant=participant,
-            order=4,
+            order=task_order,
             is_done=False
         )
 

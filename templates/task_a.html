@@ -34,6 +34,13 @@
                 </div>
             </div>
         </form>
+        {% if tooling_level == '2' %}
+            {% include 'existingtool.html' %}
+        {% endif %}
+        {% if tooling_level == '3' %}
+            {% include 'dipiditool.html' %}
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}
