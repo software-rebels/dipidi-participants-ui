@@ -1,23 +1,28 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
 {% block title %}Task B{% endblock %}
-{% block subtitle %}Task {{ order }}{% endblock %}
+{% block subtitle %}Task {{ order }}: Rank the Commits{% endblock %}
 {% block content %}
+    <h4>Task Description</h4>
     <p>
-        You are given three commits and a set of build specifications. We ask you to rank the commits listed in
-        the experiment UI based on (a) the number of impacted deliverables or (b) the number of impacted application
-        variants (e.g., number of affected OS). Rank the commits in an ascending order (1=Most Impacted, 3=Less Impacted)
+        You will be shown three commits and a set of build specifications.
+        We ask you to rank the commits listed in the experiment UI based on (a) the number
+        of impacted deliverables or (b) the number of impacted
+        application variants (e.g., number of affected OS).
+        Rank the commits in an ascending order (1=Most Impact, 3=Less Impact)
     </p>
+    <p>Follow the steps below to prepare for the task. Once you completed the steps, click on ready and the task will begin.</p>
+    <ul>
     {% if tooling_level == '3' %}
-        <p>Access DiPiDi tool at <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></p>
+        <li>Access DiPiDi tool at (<span style="color: red;">link maybe different than other tasks</span>) <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></li>
     {% endif %}
 
     {% if tooling_level == '2' %}
-        <p>Access the tool at <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></p>
+        <li>Access the tool at (<span style="color: red;">link maybe different than other tasks</span>) <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></li>
     {% endif %}
 
-    <h3>Project Name: {{ project }}</h3>
-    <p>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></p>
+    <li>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></li>
+    </ul>
     {% if not ready %}
         <form role="form" class="row" method="post" action="ready">
             {% csrf_token %}

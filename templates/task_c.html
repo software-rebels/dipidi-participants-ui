@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
 {% block title %}Task C{% endblock %}
-{% block subtitle %}Task {{ order }}{% endblock %}
+{% block subtitle %}Task {{ order }}: Identify the Commit{% endblock %}
 {% block content %}
+    <h4>Task Description</h4>
     <p>
-    You are presented with three commits and asked to identify those that
-        (a) affect a specified set of deliverables or (b) affect a specific variant of the software or
-        (c) identify the configuration settings under which the changes will affect any deliverable(target).
+    You will be shown three commits and asked to identify
+        (a) the commits that affect a specified set of deliverables,
+        (b) the commits that affect a specific variant of the software, or
+        (c) the configuration settings under which the changes will affect at least one target.
     </p>
+        <p>Follow the steps below to prepare for the task. Once you completed the steps, click on ready and the task will begin.</p>
+    <ul>
     {% if tooling_level == '3' %}
-        <p>Access DiPiDi tool at <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></p>
+        <li>Access DiPiDi tool at (<span style="color: red;">link maybe different than other tasks</span>) <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></li>
     {% endif %}
 
     {% if tooling_level == '2' %}
-        <p>Access the tool at <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></p>
+        <li>Access the tool at (<span style="color: red;">link maybe different than other tasks</span>) <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></li>
     {% endif %}
 
-    <h3>Project Name: {{ project }}</h3>
-    <p>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></p>
+    <li>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></li>
+    </ul>
     {% if not ready %}
         <form role="form" class="row" method="post" action="ready">
             {% csrf_token %}
@@ -32,7 +36,9 @@
             <b>Identify the commits which affect this variant: {{ variant }}</b>
         {% endif %}
         {% if type == 3 %}
-            <b>Under which build time configurations the changes will propagate to any deliverable(target)? Please write the configuration</b>
+            <b>For each of the given commits, identify at least one configuration setting under which the change
+                will propagate to at least one deliverable(target). If the change will propagate irrespective of
+                the conditional settings, enter the term "ALL".</b>
         {% endif %}
         <form role="form" class="row" method="post">
             {% csrf_token %}

@@ -38,27 +38,28 @@ class StartPageView(LoginRequiredMixin, View):
         participant = self.request.user.participant
         template = "welcome.html"
         rendered_tasks = []
-        for idx, task in enumerate(participant.tasks.all().values_list('task_type', flat=True)):
+        for task in set(participant.tasks.all().values_list('task_type', flat=True)):
             if task == 'A':
-                rendered_tasks.append([f"{idx + 1}. Find Impacted Targets",
-                                       "You are provided with the names of changed files and a set of build "
+                rendered_tasks.append([f"Find Impacted Targets",
+                                       "You will be provided with the names of changed files and a set of build "
                                        "specifications. Your task is to list impacted deliverables. The experiment UI "
-                                       "provides a text input field for you to list those deliverables."])
+                                       "provides text inputs for you to list those deliverables."])
             if task == 'B':
-                rendered_tasks.append([f"{idx + 1}. Rank the Commits",
-                                       "You are given three commits and a "
+                rendered_tasks.append([f"Rank the Commits",
+                                       "You will be shown three commits and a "
                                        "set of build specifications. We ask you to rank the "
                                        "commits listed in the experiment UI based on (a) the number "
                                        "of impacted deliverables or (b) the number of impacted "
-                                       "application variants (e.g., number of affected OS)."])
+                                       "application variants (e.g., number of affected OS). "
+                                       "More details will be provided when you start the task."])
 
             if task == 'C':
-                rendered_tasks.append([f"{idx + 1}. Identify the Commit",
-                                       "You are presented "
-                                       "with three commits and asked to identify those that (a) affect "
-                                       "a specified set of deliverables or (b) affect a specific variant of "
-                                       "the software or (c) identify the configuration settings under "
-                                       "which the changes will affect any target."
+                rendered_tasks.append([f"Identify the Commit",
+                                       "You will be shown three commits and asked to identify "
+                                       "(a) the commits that affect a specified set of deliverables, "
+                                       "(b) the commits that affect a specific variant of the software, or "
+                                       "(c) the configuration settings under which the changes will affect at least "
+                                       "one target."
                                        ])
 
         return render(request, template, {

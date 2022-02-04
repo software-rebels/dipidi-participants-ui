@@ -4,14 +4,12 @@
 {% block subtitle %}Welcome{% endblock %}
 {% block content %}
     <h1>Get started with the experiment</h1>
-    <div class="col-lg-8 px-0">
-        <p class="lead">Thank you for your time. You can start the experiment by clicking on the button blow. Before
-            that,
-            we recommend going through a quick overview of the tasks in this page.</p>
+    <div class="col px-0">
+        <p class="lead">Thank you for your time. You can start the experiment by clicking on the "Start Experiment" button located at the bottom of this page. Before
+            that, we recommend going through a quick overview of the tasks in this page.</p>
     </div>
 
-    <a href="{% url 'begin_page' %}" class="btn btn-primary mr-3">Start Experiment</a>
-    <a class="btn btn-secondary mr-3">Exit</a>
+
 
     <hr class="my-5 w-25 mx-0">
     <div class="row">
@@ -20,8 +18,10 @@
             <ol>
                 <li><b>What is a target (or deliverable)?</b> A target is the final build artifact that is either a library or a executable. In CMake, the targets are defined by add_executable or add_library commands. To read more, <a href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#:~:text=A%20CMake%2Dbased%20buildsystem%20is,custom%20target%20containing%20custom%20commands">click here</a></li>
                 <li><b>How can I find the targets for a project?</b> Each CMake project starts with CMakeLists.txt file in the root folder. You can start finding target related commands in this file for each project.</li>
-                <li><b>Can I use my own IDE or other tools?</b> Yes!</li>
-                <li><b>Do I have access to the project source code?</b> We will give you the repository URL of the project in each step.</li>
+                {% if tooling_level != '1' %}
+                <li><b>Can I use my own IDE or other tools in addition to the tools provided?</b> Yes! In fact we recommend to take a look at the source code. The tool may overestimate or underestimate the impact.</li>
+                {% endif %}
+                <li><b>Do I have access to the project source code?</b> Yes! We will give you the repository URL of the project in each step.</li>
             </ol>
         </div>
     </div>
@@ -41,6 +41,7 @@
 
             </div>
         {% endfor %}
+    <a href="{% url 'begin_page' %}" class="btn btn-primary mr-3">Start Experiment</a>
     </div>
 
     <hr class="my-5">

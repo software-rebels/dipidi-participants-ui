@@ -1,27 +1,37 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
 {% block title %}Task A{% endblock %}
-{% block subtitle %}Task {{ order }}{% endblock %}
+{% block subtitle %}Task {{ order }}: Find Impacted Targets{% endblock %}
 {% block content %}
-    <p>You are provided with the names of changed files and a set of build specifications. Your task is to list impacted deliverables. The experiment UI provides a text input field for you to list those deliverables.</p>
+    <h4>Task Description</h4>
+    <p>
+    You will be provided with the names of changed files and a set of build
+                                       specifications. Your task is to list impacted deliverables. The experiment UI
+                                       provides text inputs for you to list those deliverables.
+
+    </p>
+    <p>Follow the steps below to prepare for the task. Once you completed the steps, click on ready and the task will begin.</p>
+    <ul>
+
+
     {% if tooling_level == '3' %}
-        <p>Access DiPiDi tool at <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></p>
+        <li>Access DiPiDi tool at (<span style="color: red;">link maybe different than other tasks</span>) <a href="{{ dipidi_url }}">{{ dipidi_url }}</a></li>
     {% endif %}
 
     {% if tooling_level == '2' %}
-        <p>Access the tool at <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></p>
+        <li>Access the tool at (<span style="color: red;">link maybe different than other tasks</span>) <a href="{{ existing_tool_url }}">{{ existing_tool_url }}</a></li>
     {% endif %}
-
-    <h3>Project Name: {{ project }}</h3>
-    <p>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></p>
+    <li>Clone the repository from: <a href="{{ repo_link }}">{{ repo_link }}</a></li>
+    </ul>
     {% if not ready %}
         <form role="form" class="row" method="post" action="ready">
             {% csrf_token %}
             {% buttons submit='Ready' layout='inline' %}{% endbuttons %}
         </form>
     {% endif %}
+
     {% if ready %}
-        <p><b>Given the following commit id and the build time configuration, please find the impacted targets (deliverables). There are extra inputs than the actually impacted targets.</b></p>
+        <p><b>Given the following commit id and the build time configuration, please find the impacted targets (deliverables). There maybe more input fields than necessary to complete the task.</b></p>
         <p><b>Change Commit ID: {{ commit }}</b></p>
         <p><b>Build Configuration: {{ configuration }}</b></p>
         <form role="form" class="row" method="post">
