@@ -101,7 +101,7 @@ class SkipTaskView(LoginRequiredMixin, View):
 class TasksView(LoginRequiredMixin, View):
     def get(self, request, order):
         participant = self.request.user.participant
-        if order > 3:
+        if order > 5:
             url = reverse('post_experiment')
             return HttpResponseRedirect(url)
 
@@ -189,7 +189,7 @@ class PostExperimentView(LoginRequiredMixin, View):
         form = Questionnaire(request.POST)
         if form.is_valid():
             TimeLog.createAction(f"PostExperiment-Finished", participant)
-            task = ParticipantTask.objects.get(participant=participant, order=4)
+            task = ParticipantTask.objects.get(participant=participant, order=6)
             Response.objects.create(participant_task=task, response=json.dumps(form.cleaned_data))
             task.is_done = True
             task.save()
