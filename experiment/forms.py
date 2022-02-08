@@ -17,7 +17,7 @@ class TypeCForm(forms.Form):
 
 class TypeC2Form(forms.Form):
     commit_id = forms.CharField(disabled=True)
-    configuration = forms.CharField()
+    configuration = forms.CharField(required=False)
 
 
 class Questionnaire(forms.Form):
