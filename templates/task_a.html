@@ -5,9 +5,15 @@
 {% block content %}
     <h4>Task Description</h4>
     <p>
-    You will be provided with the names of changed files and a set of build
-                                       specifications. Your task is to list impacted deliverables. The experiment UI
-                                       provides text inputs for you to list those deliverables.
+        You will be provided with the names of changed files and a set of build
+        specifications. Your task is to list impacted deliverables (targets).
+        Deliverables are defined in CMake files (CMakeLists.txt or .cmake files) using add_library or add_executable
+        commands. You can find these files in the project repository.
+        These commands take a target name and a list of files which impact the target. Some files may be
+        excluded under different configuration. As an example, a code file related to ARM processor may not be included
+        in the deliverable for Intel CPUs.
+        Read more <a href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#binary-targets">here.</a>
+        The experiment UI provides text inputs for you to list those deliverables.
 
     </p>
     <p>Follow the steps below to prepare for the task. Once you completed the steps, click on ready and the task will begin.</p>
