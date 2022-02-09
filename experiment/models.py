@@ -43,7 +43,7 @@ class TimeLog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.participant.user.email}-{self.action}-{self.created_at}'
+        return f'{self.participant.user.username}-{self.action}-{self.created_at}'
 
     @classmethod
     def createAction(cls, action: str, participant: Participant):
@@ -120,5 +120,5 @@ class Response(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.participant_task.participant.user.email}-{self.participant_task.task.task_type} '
+        return f'{self.participant_task.participant.user.username}-{self.participant_task.task.task_type} '
 
