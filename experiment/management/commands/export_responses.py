@@ -34,8 +34,10 @@ class Command(BaseCommand):
                                 result.append(f"{response['commit_id']}:{response['configuration']}")
                             elif "affect" in response:
                                 result.append(f"{response['commit_id']}:{response['affect']}")
+                        if task.task.task_type == "Q":
+                            result += [str(x) for x in response.values()]
                     row[id_to_task_map[task.task_id]] = ",".join(result)
-                rows.append(row)
+            rows.append(row)
             with open("result.csv", 'w', newline='') as csv_out:
                 writer = csv.DictWriter(csv_out, fieldnames=columns)
                 writer.writeheader()
