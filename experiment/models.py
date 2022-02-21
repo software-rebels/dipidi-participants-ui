@@ -94,7 +94,7 @@ class ParticipantTask(models.Model):
         A = Task.objects.filter(task_type='A', project=projects[0])
         B = Task.objects.filter(task_type='B', project=projects[1])
         C = Task.objects.filter(task_type='C', project=projects[2])
-        tasks = random.choices(A) + random.choices(B, k=2) + random.choices(C, k=2)
+        tasks = random.choices(A) + random.sample(B, 2) + random.sample(C, 2)
         random.shuffle(tasks)
         task_order = 1
         for idx, task in enumerate(tasks):
