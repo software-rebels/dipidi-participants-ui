@@ -91,15 +91,15 @@ class ParticipantTask(models.Model):
         random.shuffle(projects)
 
         # Randomly select 1 Type A, 2 Type B, and 2 Type C task from different projects
-        A = Task.objects.filter(task_type='A', project=projects[0])
-        B = Task.objects.filter(task_type='B', project=projects[1])
-        C = Task.objects.filter(task_type='C', project=projects[2])
-        tasks = random.choices(A) + random.sample(B, 2) + random.sample(C, 2)
+        A = Task.objects.filter(task_type='A', project=projects[0]).values_list('id', flat=True)
+        B = Task.objects.filter(task_type='B', project=projects[1]).values_list('id', flat=True)
+        C = Task.objects.filter(task_type='C', project=projects[2]).values_list('id', flat=True)
+        tasks = random.choices(list(A)) + random.sample(list(B), 2) + random.sample(list(C), 2)
         random.shuffle(tasks)
         task_order = 1
         for idx, task in enumerate(tasks):
             ParticipantTask.objects.create(
-                task=task,
+                task_id=task,
                 participant=participant,
                 order=task_order,
                 is_done=False
